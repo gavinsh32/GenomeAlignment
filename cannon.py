@@ -7,6 +7,7 @@ import random
 import math
 
 GENE_LEN = 90
+ALLELES = ['A', 'C', 'T', 'G']
 
 # Cannon entity simulates a projectile launcher
 class Cannon:
@@ -23,17 +24,28 @@ class Cannon:
         self.y = y
 
     def makeRandomGene(self):
-        return [('A' if random.randint(0, 1) == 1 else 'C') for i in range(0, GENE_LEN)]
+        return [random.choice(ALLELES) for _ in range(0, GENE_LEN)]
 
     # Count A's to calculate tilt and power.
     def getStats(self):
         tilt = 0
         power = 0
         for i in range(0, GENE_LEN):
-            tilt += 1 if self.tiltGene[i] == 'A' else 0
+            
             power += 1 if self.powerGene[i] == 'A' else 0
         return (float(tilt), float(power))
     
+    def calcTilt(self):
+        a = 5
+        c = 1
+        t = 1
+        g = -5
+        self.getPowerGene().count('A')
+
+    def calcPower(self):
+        pass
+    
+    # Return a new copy
     def copy(self):
         temp = Cannon(self.x, self.y)
         temp.setTiltGene(self.getTiltGene())
