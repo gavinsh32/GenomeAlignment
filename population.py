@@ -9,10 +9,10 @@ class Population:
     population = [] # list of cannons
 
     # Init a new population from scratch
-    def __init__(self, n=100, x=0, y=0, existing=None):
+    def __init__(self, n=100, existing=None):
         random.seed()
         if existing is None:
-            self.population = [cannon.Cannon(x, y) for i in range(0, n)]
+            self.population = [cannon.Cannon() for i in range(0, n)]
         else:
             self.setPop(existing)
     
@@ -58,7 +58,7 @@ class Population:
     
     # Set the population to the new list of cannons
     def setPop(self, newPopulation):
-        self.population = newPopulation.getPop()
+        self.population = newPopulation
 
     # Return a reference to a cannon at an index
     def at(self, index) -> cannon:
@@ -69,12 +69,8 @@ class Population:
 
     # Reproduce population by a percent, and return children
     def reproduce(self, per):        
-        children = Population(0)
-        for i in range(0, self.percent(per)):
-            child = random.choice(self.getPop())
-            children.append(child)
-
-        return Population(existing=children)
+        children = [random.choice(self.getPop()) for _ in range(0, self.percent(per))]
+        self.population += children
 
     # Join this population with another
     def join(self, population):
