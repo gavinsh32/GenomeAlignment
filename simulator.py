@@ -1,4 +1,4 @@
-# simulator.py
+    # simulator.py
 # Handles the environment where cannons "shoot"
 
 import population
@@ -23,8 +23,9 @@ class Simulator:
         self.dimensions = (w, h)
 
     # Fire all cannons, return all which come within some threshold of the target
-    def fire(self, pop : population, step=0.1, max=3):
-
+    def fire(self, pop : population, threshold: int):
+        step=0.1
+        max=3
         hit = []    # Cannons which hit the target 
         minDist = [1000000 for i in range(0, pop.size())]   # The closest they came to the target
 
@@ -52,7 +53,7 @@ class Simulator:
                 t += step
 
         # Select individuals within the threshold
-        return minDist
+        return self.select(pop, minDist, threshold)
 
     # Select all cannons from a population under a threshold t
     def select(self, pop: population, dists: list, thresh: int):

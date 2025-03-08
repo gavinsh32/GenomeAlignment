@@ -97,7 +97,7 @@ class Cannon:
         pool = []
         for i in range(0, len(p)):
             pool += [ALLELES[i] for _ in range(0, p[i])]
-        print(pool)
+        # print(pool)
         return random.choice(pool)
 
     def getTiltGene(self):
@@ -111,6 +111,3 @@ class Cannon:
 
     def setPowerGene(self, newGene):
         self.powerGene = newGene
-
-cannon = Cannon()
-print(cannon.mutateAllele('G'))
