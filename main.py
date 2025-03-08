@@ -21,11 +21,9 @@ sim.initTarget(targetx, targety, width)
 
 # Engine
 pop = population.Population(n=psize)
-for epoch in range(0, 16):
+for epoch in range(0, 1):
     print('Generation', epoch, 'population size', pop.size())
-    result = sim.fire(pop, 0)
-    result.reproduce(0)
-    result.cull(30) # increase selection pressure
-    # result.mutate()
-    pop.cull(20)
-    pop.join(result)
+    indiv = cannon.Cannon()
+    print(indiv.getTiltGene())
+    indiv.mutateTilt(10)
+    print(indiv.getTiltGene())
