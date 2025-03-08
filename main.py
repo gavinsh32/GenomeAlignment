@@ -5,45 +5,56 @@
 import simulator
 import population
 import cannon
+import analyze
+
 
 width = 100
 height = 100
 targetx = 50
 targety = 50
 targetw = 10
-psize = 100
 
-sim = simulator.Simulator()
-sim.initBounds(width, height)
-sim.initTarget(targetx, targety, width)
+def generation(psize, reproduction_rate):
+    sim = simulator.Simulator()
+    sim.initBounds(width, height)
+    sim.initTarget(targetx, targety, width)
 
-pop = population.Population(n=psize)
+    pop = population.Population(n=psize)
 
-for epoch in range(0, 1):
+    for epoch in range(0, 1):
 
-    print('Generation', epoch, 'population size', pop.size())
+        print('Generation', epoch, 'population size', pop.size())
+        time.append(epoch)
+        # Fire cannons, get a list of how close they came
+        result = sim.fire(pop)
 
-    # Fire cannons, get a list of how close they came
-    result = sim.fire(pop)
+        # Select fit individuals based on the closest each came to the target
+        fit = sim.select(pop, result, 10)
 
-    # Select fit individuals based on the closest each came to the target
-    fit = sim.select(pop, result, 10)
 
-    print('Success:', fit.size() / pop.size())
-    
-    # Reproduce fit individuals
-    children = fit.reproduce(10)
+        print('Success:', fit.size() / pop.size())
+        success = fit.size() / pop.size() 
+        success_rate.append(success)
 
-    print(children.getStats())
+        # Reproduce fit individuals
+        children = fit.reproduce(reproduction_rate)
+        analyze.save_sequence(children)
 
-    # Mutate children
-    #children.mutateTilt(5, 3)
-    #children.mutatePower(5, 2)
+        print(children.getStats())
 
-    # Cull initial population
-    #pop.cull(5)
+        # Mutate children
+        #children.mutateTilt(5, 3)
+        #children.mutatePower(5, 2)
 
-    # Add children to population
-    #pop.join(children)
+        # Cull initial population
+        #pop.cull(5)
 
-    # Repeat for each generation
+        # Add children to population
+        #pop.join(children)
+
+        # Repeat for each generation
+    return time, success_rate
+
+
+time, success_rate = generation(100, 10)
+analyze.graphs_generations()
