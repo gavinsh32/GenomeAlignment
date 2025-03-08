@@ -94,6 +94,12 @@ class Cannon:
         for i in range(0, self.percent(percent)):
             gene[i] = self.mutateAllele(random.choice(gene))
 
+    def percent(self, n):
+        return n // 100 * self.size()
+
+    def size(self):
+        return len(self.getTiltGene())
+
     # Mutate a single allele to another with weighted probability
     def mutateAllele(self, allele):
         p = MUTATIONRATES[allele]

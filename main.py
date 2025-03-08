@@ -29,6 +29,10 @@ def generation(sim, psize, reproduction):
         result.reproduce(reproduction)
         result.cull(30) # increase selection pressure
         # result.mutate()
+        for obj in result.population:
+            obj.mutateTilt(10)
+            obj.mutatePower(10)
+        
         analyze.save_sequence(result, epoch, success)
         
         pop.cull(20)
@@ -42,17 +46,9 @@ sim.initTarget(targetx, targety, width)
 
 # population size and reproduction rate
 psize = 100
-reproduction = 10
+reproduction = 0
 
 # keep track of time for graphing
 time = generation(sim, psize, reproduction)
-analyze.graphs_generations()
-
-# Engine
-pop = population.Population(n=psize)
-for epoch in range(0, 1):
-    print('Generation', epoch, 'population size', pop.size())
-    indiv = cannon.Cannon()
-    print(indiv.getTiltGene())
-    indiv.mutateTilt(10)
-    print(indiv.getTiltGene())
+#analyze.graphs_generations()
+#analyze.graph_gene_count()
