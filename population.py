@@ -27,6 +27,19 @@ class Population:
             victim = random.randrange(0, self.size())
             self.getPop().pop(victim)   # Pop vitcim from population
 
+    def globalAlignment(self):
+        # Get Mutation Rate Matrix
+        # Convert to Log Odds
+        logOdds = cannon.MUTATIONRATES
+        print(logOdds)
+        for i in range(0, 4):
+            for j in range(0, 4):
+                pass
+        # Convert to Scoring Matrix
+        # Perform Alignment
+        # Return 
+        pass
+
     # Mutate at most n characters in each tilt gene
     def mutateTilt(self, n: int, per: int) -> None:
         for i in range(0, self.percent(per)):
@@ -96,3 +109,6 @@ class Population:
     # Get the x and y velocities of all cannons.
     def getVelocities(self):
         return [cannon.getVelocity() for cannon in self.getPop()]
+    
+pop = Population()
+pop.globalAlignment()

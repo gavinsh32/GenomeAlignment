@@ -6,21 +6,24 @@
 import random
 import math
 
-GENE_LEN = 90
-ALLELES = ['A', 'C', 'T', 'G']
+MUTATIONRATES = {
+    'A': [80, 10, 9,   1],
+    'C': [5,  70, 20,  5],
+    'T': [5,  20, 70,  5],
+    'G': [1,  9,  10, 80]
+}
 
 # Cannon entity simulates a projectile launcher
 class Cannon:
-    tiltGene = []
-    powerGene = []
-
     # Initialize a new Cannon entity with random genes and a position.
     def __init__(self):
+        self.GENE_LEN = 90
+        self.ALLELES = ['A', 'C', 'T', 'G']
         self.tiltGene = self.makeRandomGene()
         self.powerGene = self.makeRandomGene()
 
     def makeRandomGene(self):
-        return [random.choice(ALLELES) for _ in range(0, GENE_LEN)]
+        return [random.choice(self.ALLELES) for _ in range(0, self.GENE_LEN)]
 
     # Count A's to calculate tilt and power.
     def getStats(self):
@@ -81,22 +84,22 @@ class Cannon:
         yf = y0 + vy*t - (g * t ** 2) / 2
         return (int(xf), int(yf))
 
-    def mutateAll(self, n):
-        self.mutateTilt(n)
-        self.mutatePower(n)
+    def mutateTilt(self, percent: int): 
+        self.mutateGene(self.getTiltGene(), percent)
+
+    def mutatePower(self, percent: int):
+        self.mutateGene(self.getPowerGene(), percent)
+
+    def mutateGene(self, gene: list, percent: int):
+        for i in range(0, self.percent(percent)):
+            gene[i] = self.mutateAllele(random.choice(gene))
 
     # Mutate a single allele to another with weighted probability
     def mutateAllele(self, allele):
-        probabilities = {
-            'A': [80, 10, 9,   1],
-            'C': [5,  70, 20,  5],
-            'T': [5,  20, 70,  5],
-            'G': [1,  9,  10, 80]
-        }
-        p = probabilities[allele]
+        p = MUTATIONRATES[allele]
         pool = []
         for i in range(0, len(p)):
-            pool += [ALLELES[i] for _ in range(0, p[i])]
+            pool += [self.ALLELES[i] for _ in range(0, p[i])]
         # print(pool)
         return random.choice(pool)
 

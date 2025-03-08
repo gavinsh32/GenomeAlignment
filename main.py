@@ -47,3 +47,12 @@ reproduction = 10
 # keep track of time for graphing
 time = generation(sim, psize, reproduction)
 analyze.graphs_generations()
+
+# Engine
+pop = population.Population(n=psize)
+for epoch in range(0, 1):
+    print('Generation', epoch, 'population size', pop.size())
+    indiv = cannon.Cannon()
+    print(indiv.getTiltGene())
+    indiv.mutateTilt(10)
+    print(indiv.getTiltGene())
