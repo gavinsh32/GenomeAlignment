@@ -22,13 +22,15 @@ def generation(sim, psize, reproduction):
     for epoch in range(0, 16):
         print('Generation', epoch, 'population size', pop.size())
         time.append(epoch)
-        analyze.save_sequence(pop, epoch)
         
         result = sim.fire(pop, 0) # fires cannons, and selects the good ones
+        success = result.size() / pop.size()
+        print('Success:', success)
         result.reproduce(reproduction)
         result.cull(30) # increase selection pressure
-        
         # result.mutate()
+        analyze.save_sequence(result, epoch, success)
+        
         pop.cull(20)
         pop.join(result)
     return time
