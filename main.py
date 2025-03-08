@@ -15,63 +15,33 @@ targetx = 50
 targety = 30
 targetw = 10
 
-def generation(psize, reproduction_rate):
-    sim = simulator.Simulator()
-    sim.initBounds(width, height)
-    sim.initTarget(targetx, targety, width)
-
+# Engine
+def generation(sim, psize, reproduction):
+    time = []
     pop = population.Population(n=psize)
-
-    for epoch in range(0, 1):
-
+    for epoch in range(0, 16):
         print('Generation', epoch, 'population size', pop.size())
         time.append(epoch)
-        # Fire cannons, get a list of how close they came
-        result = sim.fire(pop)
-
-        # Select fit individuals based on the closest each came to the target
-        fit = sim.select(pop, result, 10)
-
-
-        print('Success:', fit.size() / pop.size())
-        success = fit.size() / pop.size() 
-        success_rate.append(success)
-
-        # Reproduce fit individuals
-        children = fit.reproduce(reproduction_rate)
-        analyze.save_sequence(children)
-
-        print(children.getStats())
-
-        # Mutate children
-        #children.mutateTilt(5, 3)
-        #children.mutatePower(5, 2)
-
-        # Cull initial population
-        #pop.cull(5)
-
-        # Add children to population
-        #pop.join(children)
-
-        # Repeat for each generation
-    return time, success_rate
-
-
-time, success_rate = generation(100, 10)
-analyze.graphs_generations()
+        analyze.save_sequence(pop, epoch)
+        
+        result = sim.fire(pop, 0) # fires cannons, and selects the good ones
+        result.reproduce(reproduction)
+        result.cull(30) # increase selection pressure
+        
+        # result.mutate()
+        pop.cull(20)
+        pop.join(result)
+    return time
 
 # Initialize simulator, bounds, and target position
 sim = simulator.Simulator()
 sim.initBounds(width, height)
 sim.initTarget(targetx, targety, width)
 
-# Engine
-pop = population.Population(n=psize)
-for epoch in range(0, 16):
-    print('Generation', epoch, 'population size', pop.size())
-    result = sim.fire(pop, 0)
-    result.reproduce(0)
-    result.cull(30) # increase selection pressure
-    # result.mutate()
-    pop.cull(20)
-    pop.join(result)
+# population size and reproduction rate
+psize = 100
+reproduction = 10
+
+# keep track of time for graphing
+time = generation(sim, psize, reproduction)
+analyze.graphs_generations()
