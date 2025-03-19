@@ -29,10 +29,10 @@ class Cannon:
     def getStats(self):
         return self.calcTilt(), self.calcPower()
     
-    # Count the number of each allele and calculate the score 
-    def calcTilt(self):
+    # Compute the score of a gene
+    def calcGene(self, gene):
         score = 0
-        for allele in self.getTiltGene():
+        for allele in gene:
             match allele:
                 case 'A': 
                     score += 5
@@ -46,21 +46,11 @@ class Cannon:
                     pass
         return score
 
+    def calcTilt(self):
+        return self.calcGene(self.getTiltGene())
+
     def calcPower(self):
-        score = 0
-        for allele in self.getPowerGene():
-            match allele:
-                case 'A': 
-                    score += 5
-                case 'C':
-                    score += 1
-                case 'T':
-                    score += -1
-                case 'G':
-                    score += -5
-                case _:
-                    pass
-        return score
+        return self.calcGene(self.getPowerGene())
     
     # Return a new copy
     def copy(self):
@@ -94,12 +84,6 @@ class Cannon:
         for i in range(0, self.percent(percent)):
             gene[i] = self.mutateAllele(random.choice(gene))
 
-    def percent(self, n):
-        return n // 100 * self.size()
-
-    def size(self):
-        return len(self.getTiltGene())
-
     # Mutate a single allele to another with weighted probability
     def mutateAllele(self, allele):
         p = MUTATIONRATES[allele]
@@ -108,6 +92,12 @@ class Cannon:
             pool += [self.ALLELES[i] for _ in range(0, p[i])]
         # print(pool)
         return random.choice(pool)
+
+    def percent(self, n):
+        return n // 100 * self.size()
+
+    def size(self):
+        return len(self.getTiltGene())
 
     def getTiltGene(self):
         return self.tiltGene

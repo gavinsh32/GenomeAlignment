@@ -1,4 +1,4 @@
-    # simulator.py
+# simulator.py
 # Handles the environment where cannons "shoot"
 
 import population
@@ -7,12 +7,10 @@ import math
 import random
 
 class Simulator:
-    target = (0, 0, 0, 0)
-    dimensions = (100, 100)
-
     # Init a simulation environment with a population of cannons
     def __init__(self):
-        pass
+        self.target = (0, 0, 0, 0)
+        self.dimensions = (100, 100)
 
     # Init a square target from the bottom left corner
     def initTarget(self, x1, y1, w):

@@ -109,6 +109,3 @@ class Population:
     # Get the x and y velocities of all cannons.
     def getVelocities(self):
         return [cannon.getVelocity() for cannon in self.getPop()]
-    
-pop = Population()
-pop.globalAlignment()
