@@ -6,12 +6,37 @@
 import random
 import math
 
-MUTATIONRATES = {
-    'A': [80, 10, 9,   1],
-    'C': [5,  70, 20,  5],
-    'T': [5,  20, 70,  5],
-    'G': [1,  9,  10, 80]
-}
+import numpy as np
+
+MUTATIONRATES = np.array([
+    [80, 10, 9, 1],   # A
+    [5, 70, 20, 5],   # C
+    [5, 20, 70, 5],   # T
+    [1, 9, 10, 80]    # G
+], dtype=float)
+
+
+
+def score_matrix():
+    # Step 1: Normalize mutation rates to probabilities (row-wise)
+    row_sums = MUTATIONRATES.sum(axis=1, keepdims=True)
+    prob_matrix = MUTATIONRATES / row_sums
+
+    # Step 2: Assume equal background frequencies for A, C, T, G (25% each)
+    background_freq = np.array([0.25, 0.25, 0.25, 0.25])
+
+    # Step 3: Compute log-odds scores using log base 2
+    log_odds_matrix = np.log2(prob_matrix / (background_freq * background_freq[:, None]))
+
+    # Step 4: Round values for readability
+    log_odds_matrix = np.round(log_odds_matrix, 0)
+
+    # Step 5: Print matrix
+    nucleotides = ['A', 'C', 'T', 'G']
+    print("Log-Odds Scoring Matrix:\n")
+    print("    ", "     ".join(nucleotides))
+    for i, row in enumerate(log_odds_matrix):
+        print(nucleotides[i], row)
 
 # Cannon entity simulates a projectile launcher
 class Cannon:

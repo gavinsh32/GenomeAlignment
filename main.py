@@ -39,6 +39,8 @@ def generation(sim, psize, reproduction):
         pop.join(result)
     return time
 
+cannon.score_matrix()
+
 # Initialize simulator, bounds, and target position
 sim = simulator.Simulator()
 sim.initBounds(width, height)
