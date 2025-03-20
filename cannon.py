@@ -17,12 +17,12 @@ MUTATIONRATES = {
 class Cannon:
     # Initialize a new Cannon entity with random genes and a position.
     def __init__(self):
-        self.GENE_LEN = 90
+        self.GENE_LEN = 32
         self.ALLELES = ['A', 'C', 'T', 'G']
         self.tiltGene = self.makeRandomGene()
         self.powerGene = self.makeRandomGene()
 
-    def makeRandomGene(self):
+    def makeRandomGene(self) -> list[str]:
         return [random.choice(self.ALLELES) for _ in range(0, self.GENE_LEN)]
 
     # Count A's to calculate tilt and power.
@@ -66,7 +66,7 @@ class Cannon:
         return (power*math.cos(tilt), power*math.sin(tilt))
     
     # Calculate the position of the cannon's projectile after t seconds.
-    def fire(self, t):
+    def fire(self, t) -> tuple[int, int]:
         vx, vy = self.getVelocity()
         x0, y0 = 0, 0
         g = 9.81
