@@ -58,10 +58,6 @@ class Alignment:
             else:
                 j += 1
 
-        right = self.scoringMatrix[i][j+1]
-        diag = self.scoringMatrix[i+1][j+1]
-        down = self.scoringMatrix[i+1][j]
-
         score += max(right, max(diag, down))
 
         return score, s, t
@@ -72,12 +68,12 @@ class Alignment:
         cols = len(self.seq2) + 1
 
         text = '         '
-        for c in seq2:
+        for c in self.seq2:
             text += f'{c:4}'
         text += '\n'
 
         for i in range(0, rows):
-            text += '  ' if i == 0 else seq1[i - 1] + ' '
+            text += '  ' if i == 0 else self.seq1[i - 1] + ' '
             for j in range(0, cols):
                 text += f'{repr(self.scoringMatrix[i][j]):>4}'
             text += '\n'
