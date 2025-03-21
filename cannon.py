@@ -42,22 +42,22 @@ def score_matrix():
 class Cannon:
     # Initialize a new Cannon entity with random genes and a position.
     def __init__(self):
-        self.GENE_LEN = 90
+        self.GENE_LEN = 32
         self.ALLELES = ['A', 'C', 'T', 'G']
         self.tiltGene = self.makeRandomGene()
         self.powerGene = self.makeRandomGene()
 
-    def makeRandomGene(self):
+    def makeRandomGene(self) -> list[str]:
         return [random.choice(self.ALLELES) for _ in range(0, self.GENE_LEN)]
 
     # Count A's to calculate tilt and power.
     def getStats(self):
         return self.calcTilt(), self.calcPower()
     
-    # Count the number of each allele and calculate the score 
-    def calcTilt(self):
+    # Compute the score of a gene
+    def calcGene(self, gene):
         score = 0
-        for allele in self.getTiltGene():
+        for allele in gene:
             match allele:
                 case 'A': 
                     score += 5
@@ -71,21 +71,11 @@ class Cannon:
                     pass
         return score
 
+    def calcTilt(self):
+        return self.calcGene(self.getTiltGene())
+
     def calcPower(self):
-        score = 0
-        for allele in self.getPowerGene():
-            match allele:
-                case 'A': 
-                    score += 5
-                case 'C':
-                    score += 1
-                case 'T':
-                    score += -1
-                case 'G':
-                    score += -5
-                case _:
-                    pass
-        return score
+        return self.calcGene(self.getPowerGene())
     
     # Return a new copy
     def copy(self):
@@ -101,7 +91,7 @@ class Cannon:
         return (power*math.cos(tilt), power*math.sin(tilt))
     
     # Calculate the position of the cannon's projectile after t seconds.
-    def fire(self, t):
+    def fire(self, t) -> tuple[int, int]:
         vx, vy = self.getVelocity()
         x0, y0 = 0, 0
         g = 9.81
@@ -119,12 +109,6 @@ class Cannon:
         for i in range(0, self.percent(percent)):
             gene[i] = self.mutateAllele(random.choice(gene))
 
-    def percent(self, n):
-        return n // 100 * self.size()
-
-    def size(self):
-        return len(self.getTiltGene())
-
     # Mutate a single allele to another with weighted probability
     def mutateAllele(self, allele):
         p = MUTATIONRATES[allele]
@@ -133,6 +117,12 @@ class Cannon:
             pool += [self.ALLELES[i] for _ in range(0, p[i])]
         # print(pool)
         return random.choice(pool)
+
+    def percent(self, n):
+        return n // 100 * self.size()
+
+    def size(self):
+        return len(self.getTiltGene())
 
     def getTiltGene(self):
         return self.tiltGene

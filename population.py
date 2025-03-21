@@ -6,15 +6,16 @@ import cannon
 
 # Defines a list of cannons, and extends cannon functionality to work on a population
 class Population:
-    population = [] # list of cannons
-
     # Init a new population from scratch
-    def __init__(self, n=100, existing=None):
+    def __init__(self, n=100, existing=[]):
         random.seed()
-        if existing is None:
+        if len(existing) < 1:
             self.population = [cannon.Cannon() for i in range(0, n)]
         else:
-            self.setPop(existing)
+            self.population = existing
+        # Constants
+        self.MUTATE_N = 10
+        self.MUTATE_PERCENT = 10
     
     # Fire all cannons and get the coordinates of each at time t
     def fire(self, t: float):
@@ -42,8 +43,8 @@ class Population:
 
     # Mutate at most n characters in each tilt gene
     def mutateTilt(self, n: int, per: int) -> None:
-        for i in range(0, self.percent(per)):
-            random.choice(self.getPop()).mutateTilt(n)
+        for i in range(0, n):
+            random.choice(self.getPop()).mutateTilt(per)
 
     # Mutate at most n characters in each power gene
     def mutatePower(self, n: int, per: int) -> None:
@@ -58,44 +59,45 @@ class Population:
             return 0
 
     # Return a copy of the population
-    def copy(self):
+    def copy(self) -> list[cannon]:
         return [cannon.copy() for cannon in self.getPop()]
 
     # Return the length of the population
-    def size(self):
+    def size(self) -> int:
         return len(self.getPop())
 
     # Get a list of all cannon entities in population.
-    def getPop(self):
+    def getPop(self) -> list[cannon]:
         return self.population
     
     # Set the population to the new list of cannons
-    def setPop(self, newPopulation):
+    def setPop(self, newPopulation: list[cannon]) -> None:
         self.population = newPopulation
 
     # Return a reference to a cannon at an index
-    def at(self, index) -> cannon:
+    def at(self, index: int) -> cannon:
         if 0 <= index and index < self.size():
             return self.population[index]
         else:
             return None
 
     # Reproduce population by a percent, and return children
-    def reproduce(self, per):        
+    def reproduce(self, per: int) -> None:        
         children = [random.choice(self.getPop()) for _ in range(0, self.percent(per))]
         self.population += children
 
-    # Join this population with another
+    # Join another population with this one 
     def join(self, population):
         if population is not None:
             self.setPop(self.getPop() + population.getPop())
 
-    def append(self, cannon: cannon):
+    # Append a cannon to this population
+    def append(self, cannon: cannon) -> None:
         if cannon is not None:
             self.getPop().append(cannon)
 
     # Get all tilt genes.
-    def getTiltGenes(self):
+    def getTiltGenes(self) -> list[str]:
         return [cannon.getTiltGene() for cannon in self.getPop()]
     
     # Get all power genes.
@@ -109,6 +111,3 @@ class Population:
     # Get the x and y velocities of all cannons.
     def getVelocities(self):
         return [cannon.getVelocity() for cannon in self.getPop()]
-    
-pop = Population()
-pop.globalAlignment()
