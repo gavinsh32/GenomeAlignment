@@ -1,4 +1,4 @@
-# cannonevolution
+# GenomeAlignment
 Project 2 for CS415 Computational Biology: Sequence Analysis
 ## Overview
 Fire and evolve cannons.
