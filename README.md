@@ -1,5 +1,5 @@
 # cannonevolution
-Project 1 for CS415 Computational Biology: Sequence Analysis
+Project 2 for CS415 Computational Biology: Sequence Analysis
 ## Overview
 Fire and evolve cannons.
 ## Cannon Specification
@@ -13,9 +13,3 @@ Python 3.12
 ## Authors
 Gavin Haynes,
 Samuel Beal 
-
-### Research Paper
-> [https://www.overleaf.com/read/xfyvdqcddvvy#1d06e1](url)
-### More resources
-> [https://www.youtube.com/watch?v=Xk3BHf9imCU](url)
-> 
